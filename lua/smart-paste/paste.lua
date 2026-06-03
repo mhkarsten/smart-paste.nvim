@@ -241,7 +241,8 @@ function M.do_paste(_motion_type)
 
     if charwise_newline and is_charwise then
       local lines = reginfo.regcontents
-      local stripped = strip_leading_whitespace(lines)
+      --local stripped = strip_leading_whitespace(lines)
+      local stripped = vim.deepcopy(lines)
       local source_indent = indent.get_source_indent(stripped)
       local bufnr = vim.api.nvim_get_current_buf()
       local row = vim.api.nvim_win_get_cursor(0)[1] - 1 -- 0-indexed
