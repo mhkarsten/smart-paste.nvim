@@ -240,15 +240,13 @@ function M.do_paste(_motion_type)
     local is_charwise = (reginfo.regtype == 'v')
 
     if charwise_newline and is_charwise then
-      local lines = reginfo.regcontents
-      --local stripped = strip_leading_whitespace(lines)
-      local stripped = vim.deepcopy(lines)
-      local source_indent = indent.get_source_indent(stripped)
+      local lines = vim.deepcopy(reginfo.regcontents)
+      local source_indent = indent.get_source_indent(lines)
       local bufnr = vim.api.nvim_get_current_buf()
       local row = vim.api.nvim_win_get_cursor(0)[1] - 1 -- 0-indexed
       local target_indent = resolve_linewise_target_indent(bufnr, row, after)
       local delta = target_indent - source_indent
-      local adjusted = indent.apply_delta(stripped, delta, bufnr)
+      local adjusted = indent.apply_delta(lines, delta, bufnr)
       local final_lines = repeat_lines(adjusted, count)
       vim.api.nvim_put(final_lines, 'l', after, follow)
       return
